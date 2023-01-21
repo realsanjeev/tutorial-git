@@ -98,6 +98,45 @@ After use of brach and `first-brach` donot have any uses. Delete that brac using
 ```
 $ git branch -d first-branch
 ```
+## Git .gitignore
+`.gitignore` file includeitself is being ttracked. file that you donot want to be tracked. But `.gitignore` file itself is being tracked.
+```
+$ touch .gitignore
+$ nano .gitignore
+```
+Example
+```
+# ignore all .config file
+*.log
+# ignore all files in directory test in root.
+test/*
+```
+It is also possible to gnore files and directory and not been shown in .gitignore file. For this specify file to be ignored in
+> .git/info/exclude_file
+
+## Git Revert Reset and Ammend
+`git revert` is command we use when we want to take a previous commit point and add it as new commit. But all log is still available
+Revert latest commit in repo
+```
+$ git revert HEAD --no-edit
+```
+To revert to earlier commit, we use `$ git revert HEAD~x` where `x` is number from latest commit to specified commit. x is 0 for latest commit
+To undo revert command
+```
+$ git revert --abort
+```
+`Git reset` is different from `git revert`. `git reset` takes us to previous commit point and delete all log following that point. While `git revert` has all log.
+```
+$ git reset commit-hash
+```
+You can get `commit-hash` from `$ git log --oneline`. It gors to point of `commit-hash`
+`git ammend` is used to modify most recent commit.
+To edit most latest commit, we use
+```
+$ git commit -m 'This is edited message from latest commit`
+```
+
+
 # Git and Github
 Github is used to track changes in remote repo.
 Create a repo in github and copy HTTPS url: `https://github.com/realsanjeev/tutorial-git.git`
@@ -108,6 +147,10 @@ $ git remote add origin https://github.com/realsanjeev/tutorial-git.git
 **See how remote is set-up**
 ```
 git remote -v
+```
+You can rename remote origin to upstream using 
+```
+$ git remote rename origin upstream
 ```
 Push repo from local git to remote Github
 ```
@@ -142,20 +185,32 @@ $ git push --set-upstream origin first-branch
 To track changes in brach of remote repo. If you create brach in remote repo `second-branch`
 `$ git checkout origin/second-branch`
 
-## Git .gitignore
-`.gitignore` file includeitself is being ttracked. file that you donot want to be tracked. But `.gitignore` file itself is being tracked.
-```
-$ touch .gitignore
-$ nano .gitignore
-```
-Example
-```
-# ignore all .config file
-*.log
-# ignore all files in directory test in root.
-test/*
-```
-It is also possible to gnore files and directory and not been shown in .gitignore file. For this specify file to be ignored in
-> .git/info/exclude_file
+## Use SSH to connect GitHub
+SSH(Secure Shell Protocal) is used for network management, remote file transfer and remote system access. SSH is used when you use unsecured network.
+**Generate SSH key-pair**
 
-## Git Revert Reset and Ammend
+`RSA(Rivest-Shamier-Adleman)` is public key cryptosystem whose typical key size is from 2948 to 4096. For this example, we use rsa to generate key.
+```
+$ ssh-keygen -t rsa -b 4096
+```
+You are opt to enter passphrase and location to store ssh-key. You can default storing location.You can add passphrase to d additional layer of security. For me, doing in kali linux `/home/kali/.ssh/id_rsa` is default location.
+**Add SSH key-pair to SSH-Agent**
+```
+$ ssh-add /home/kali/.ssh/id_rsa
+```
+You will be opt to enter passphrase if any earlier.
+copy public key to our clipboard which in location `/home/kali/.ssh/id_rsa.pub`
+Then paste in github
+> Go to profile setting > SSH > Add SSH > paste there
+**Test SSH connection to Github**
+```
+$ ssh -T git@github.com
+```
+Add new GitHub SSH REmote to local repo
+```
+$ git remote add ssh-origin <ssh-url>
+```
+or convert our https connection to ssh
+```
+$ git remote set-url origin <ssh-url>
+```
