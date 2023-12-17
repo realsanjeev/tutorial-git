@@ -1,6 +1,6 @@
 # Git Commands
 ## Configure Git
-Use global to set the username and e-mail for every repository on your computer.
+Use `--global` to set the username and e-mail for every repository on your computer(system level setup).
 ```
 $ git config --global user.name '<username>'
 $ git config --global user.email '<your@email.com>'
@@ -94,10 +94,18 @@ $ git checkout master
 $ git merge first-branch
 ```
 Some-time when you change both files and want to merge. There may be merge conflct. For this `merge-conflict` of changed file should be resolved. And stage that change.
-After use of brach and `first-brach` donot have any uses. Delete that brac using command.
+
+**Delete the branches**
+After use of brach and `first-brach` donot have any uses. Delete that branch(local) using command.
 ```
 $ git branch -d first-branch
 ```
+To delete the remote branch. Or use `-d` flag short form of `--delete`
+```
+$ git push origin --delete <branch-name>
+```
+`git remote prune origin`: Prunes (removes) remote-tracking references to branches that no longer exist on the remote repository named "origin."
+
 ## Git .gitignore
 `.gitignore` file includeitself is being ttracked. file that you donot want to be tracked. But `.gitignore` file itself is being tracked.
 ```
@@ -127,9 +135,9 @@ $ git revert --abort
 ```
 `Git reset` is different from `git revert`. `git reset` takes us to previous commit point and delete all log following that point. While `git revert` has all log.
 ```
-$ git reset commit-hash
+$ git reset <commit-hash>
 ```
-You can get `commit-hash` from `$ git log --oneline`. It gors to point of `commit-hash`
+You can get `<commit-hash>` from `$ git log --oneline`. It gors to point of `<commit-hash>`
 `git ammend` is used to modify most recent commit.
 To edit most latest commit, we use
 ```
@@ -214,3 +222,31 @@ or convert our https connection to ssh
 ```
 $ git remote set-url origin <ssh-url>
 ```
+
+# CheetSheet For Git
+| **Command** | **Description** |
+|-------------|-----------------|
+| `git init` | Initialize a new Git repository |
+| `git clone <repository_url>` | Clone a repository |
+| `git status` | Check the status of your working directory |
+| `git add <file_name>` | Add changes to the staging area |
+| `git add .` | Add all changes to the staging area |
+| `git commit -m "Commit message"` | Commit changes to the repository |
+| `git branch <branch_name>` | Create a new branch |
+| `git checkout <branch_name>` | Switch to an existing branch |
+| `git checkout -b <branch_name>` | Create and switch to a new branch |
+| `git merge <branch_name>` | Merge branches |
+| `git branch -d <branch_name>` | Delete a branch |
+| `git remote add <remote_name> <repository_url>` | Add a remote repository |
+| `git fetch <remote_name>` | Fetch changes from a remote repository |
+| `git pull <remote_name> <branch_name>` | Pull changes from a remote repository |
+| `git push <remote_name> <branch_name>` | Push changes to a remote repository |
+| `git checkout -- <file_name>` | Discard changes in the working directory |
+| `git reset HEAD <file_name>` | Unstage changes |
+| `git commit --amend` | Amend the last commit |
+| `git revert <commit_hash>` | Revert a commit |
+| `git log` | View commit history |
+| `git remote -v` | View remote repositories |
+| *Create `.gitignore` file* | Ignore files and directories |
+| `git config --global user.name "Your Name"` | Configure global user name |
+| `git config --global user.email "your.email@example.com"` | Configure global user email |
