@@ -7,7 +7,7 @@ This is line last'''
 println mainText
 
 println '-'*21
-def match= mainText=~'This'
+def match= mainText =~ 'This'
 if (match) {
     println "[matched object]: $match"
     // show all the match

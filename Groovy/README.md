@@ -250,3 +250,5 @@ if (match) {
     println match[0]
 }
 ```
+
+> To use the function from other file, we can use as class usage just like java. Otherwise we need static function to make it work.
