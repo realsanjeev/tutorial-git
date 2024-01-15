@@ -1,0 +1,29 @@
+version: '3.0'
+
+services:
+  web-app:
+    image: test:latest
+    container_name: test-container
+    depends_on:
+      - 'neo4j'
+        # condition: service_healthy  # Wait until neo4j is healthy
+    ports:
+      - "8080:5000"  # Adjust the port if needed
+    environment:
+      NEO4J_HOST: neo4j-container  # Use the linked container name
+      NEO4J_PORT: 7687  # Neo4j Bolt port
+
+  neo4j:
+    image: neo4j:latest
+    container_name: neo4j-container
+    environment:
+      NEO4J_AUTH: neo4j/password 
+    ports:
+      - "7474:7474"  # HTTP
+      - "7687:7687"  # Bolt
+    healthcheck:
+      test: ["CMD-SHELL", "curl --fail http://0.0.0.0:7474 || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
