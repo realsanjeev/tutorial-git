@@ -73,3 +73,26 @@ docker run -dp 127.0.0.1:3000:3000 \
   node:18-alpine \
   sh -c "yarn install && yarn run dev"
 ```
+
+### Docker Storage-Driver
+Docker supports various storage drivers that determine how container file systems are stored and managed on the host machine.
+
+1. **Overlay2:**
+   - **Feature:** Overlay2 is the most commonly used storage driver in Docker. It provides a more efficient and performant way of managing layered images and container filesystems.
+   - **Use Case:** Recommended for most production environments due to its balance of performance and functionality.
+
+2. **aufs (Advanced Multi-Layered Unification Filesystem):**
+   - **Feature:** aufs was one of the earlier storage drivers in Docker. It supports layered filesystems and is capable of unifying multiple directory hierarchies into a single virtual filesystem.
+   - **Use Case:** Deprecated in recent versions of Docker and replaced by Overlay2 in many scenarios.
+
+3. **Device Mapper:**
+   - **Feature:** Device Mapper uses the device mapper thin provisioning framework. It supports advanced storage features like thin provisioning and snapshotting.
+   - **Use Case:** Suitable for environments where advanced storage capabilities are required, but it may be complex to set up and maintain.
+
+4. **Btrfs (B-tree File System):**
+   - **Feature:** Btrfs is a copy-on-write filesystem that supports advanced storage features like snapshots and subvolumes. It allows for efficient storage utilization and management.
+   - **Use Case:** While it offers advanced features, Btrfs support in Docker is not as common as Overlay2, and its use may depend on specific use cases and system requirements.
+
+5. **vfs (Virtual File System):**
+   - **Feature:** VFS is a simple and generic storage driver that does not rely on advanced Linux kernel features. It is more straightforward but tends to be slower compared to other drivers.
+   - **Use Case:** Often used for testing and development environments where performance is not a critical factor.

@@ -88,7 +88,7 @@ docker pull  jenkins/jenkins:lts
 ```
 To run Jenkins,
 ```bash
-sudo docker run -p 8080:8080 -p 50000:50000 jenkins/jenkins:lts
+sudo docker run -p 8080:8080 -p 5000:5000 jenkins/jenkins:lts
 ```
 In the `docker run` command the `-p` flag is used to publish ports from the container to the host. The syntax for the `-p` flag is `-p host_port:container_port`.
 

@@ -250,3 +250,4 @@ $ git remote set-url origin <ssh-url>
 | *Create `.gitignore` file* | Ignore files and directories |
 | `git config --global user.name "Your Name"` | Configure global user name |
 | `git config --global user.email "your.email@example.com"` | Configure global user email |
+|`.gitkeep` file|Keep the empty directory for version control|
