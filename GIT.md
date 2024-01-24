@@ -1,36 +1,36 @@
 # Git Commands
 ## Configure Git
 Use `--global` to set the username and e-mail for every repository on your computer(system level setup).
-```
+```bash
 $ git config --global user.name '<username>'
 $ git config --global user.email '<your@email.com>'
 ```
 ## Initialize git which you want to track
-```
+```bash
 $ git init
 ```
 Git now knows that it should watch the folder you initiated it on. Git creates a hidden folder to keep track of changes.
 ## Git help
 See all possible commands in git. to quit from bash shell write `:q`
-```
+```bash
 $ git help --all
 ```
 See available option for specific command.
-```
+```bash
 $ git <command> -help
 ```
 ## Git Status
-Watch status of your changes in git.
-```
+Watch status of your changes in git repo.
+```bash
 $ git status
  ```
 Files in your Git repository folder can any of 2 states:
 
-- Tracked - files that Git knows about and are added to the repository
-- Untracked - files that are in your working directory, but not added to the repository
+- `Tracked` - files that Git knows about and are added to the repository
+- `Untracked` - files that are in your working directory, but not added to the repository
 
-To get status short form
-```
+To get status in short form
+```bash
 $ git status -s
 ```
 Common Short status flags are:
@@ -44,23 +44,23 @@ Common Short status flags are:
 ## Add file And stage Change
 ### Add file
 To add all file in git repo
-```
+```bash
 $ git add --all
 ```
 To add all file in git repo, we can also use `git add -A` OR `git add .`
 To add only a file with filename `text.txt`, following code is executed
-```
+```bash
 $ git add text.txt
 ```
 ### Stage change
 Adding commits keep track of our progress and changes as we work. Git considers each `commit` a "change point" or "save point". Commit tag always written with message, so that we can see what changes were made in future
 
 The `commit` command performs a commit, and the `-m` "message" adds a message.
-```
+```bash
 $ git commit -m 'Message is added'
 ```
 `-a` option will automatically stage every changed. It is generally not recommended. Since unwanted changes may be commited. (You donot need to specify file. It includes all file). It is same as `git add .` -> `git commit -m 'message the change'`
-```
+```bash
 $ git commit -a -m 'Message is added'
 ```
 ## Git commit history
