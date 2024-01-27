@@ -134,8 +134,6 @@ MERGE (sandy)-[:RATED {rating:5}]->(apollo)
 - Test all queries affected by the refactor to ensure they return the same results as before the refactoring
 - PROFILE 
 
-**Note**: Labels should be used moderattely. Try to limit it to 4 label per node. But having more donot affect cyper as whole. Label are used to reduce the time access of node.
-
 Profiling the query
 ```sql
 PROFILE MATCH (p:Person)-[:ACTED_IN]-()
@@ -143,4 +141,51 @@ WHERE p.born < '1950'
 RETURN p.name
 ```
 
+#### Profiling the Query
+```sql
+PROFILE MATCH (p:Person)-[:ACTED_IN]-()
+WHERE p.born < '1950'
+RETURN p.name
+```
+
+![Profiling the Query](images/plan.png)
+
+#### Labeling Practices in Graph Data Model
+When creating your graph data model, it's essential to adhere to certain label practices to maintain clarity and efficiency:
+
+- **Moderate Usage:** Labels should be used moderately. Limit the number of labels per node to around four. Excessive labels can clutter the graph and make it challenging to navigate.
+
+- **Avoid Unnecessary Labels:** Adding labels to nodes without a specific use case should be avoided. Labels should serve a purpose in enhancing query performance.
+
+- **Avoid Labeling for Class Hierarchies:** Using labels to represent class hierarchies for your data might lead to unnecessary complexity. It's advisable to structure your model in a way that reflects the natural relationships within your data.
+
+#### Refactoring Duplicates - Language Property
+In a large movie dataset, the `Movie` nodes have a property `languages` representing the languages of the movies. As the graph scales, it becomes evident that the `languages` property contains duplicate elements.
+
+To address this, we refactor the graph by creating separate `Language` nodes for each unique language using the `UNWIND` operation:
+
+```sql
+MATCH (m:Movie)
+UNWIND m.languages AS language
+WITH language, collect(m) AS movies
+MERGE (l:Language {name: language})
+WITH l, movies
+UNWIND movies AS m
+WITH l, m
+MERGE (m)-[:IN_LANGUAGE]->(l);
+
+MATCH (m:Movie)
+SET m.languages = null
+```
+
+This refactoring allows us to query for movies in a specific language more efficiently:
+
+```sql
+MATCH (m:Movie)-[:IN_LANGUAGE]-(l:Language)
+WHERE l.name = 'Italian'
+RETURN m.title
+```
+
 ![Profiling the query](images/plan.png)
+
+### Refactoring the 
