@@ -186,6 +186,30 @@ WHERE l.name = 'Italian'
 RETURN m.title
 ```
 
-![Profiling the query](images/plan.png)
+### Refactoring Special Relationship for Improved Efficiency
 
-### Refactoring the 
+When dealing with a large number of actors in the graph, traversing all `ACTED_IN` relationships and evaluating movie properties can lead to extensive query processing times, especially in the case of a sizable graph. The query structure `MATCH (n:Actor)-[:ACTED_IN]->(m:Movie)` might result in prolonged evaluation periods, impacting overall performance.
+
+To address this issue, a refactoring approach is introduced to optimize the process. The following command establishes a new set of relationships based on the `released` property's year:
+
+```sql
+MATCH (n:Actor)-[:ACTED_IN]->(m:Movie)
+CALL apoc.merge.relationship(n,
+  'ACTED_IN_' + left(m.released, 4),
+  {},
+  {},
+  m,
+  {}
+) YIELD rel
+RETURN count(*) AS `Number of relationships merged`;
+```
+
+This refactoring significantly improves query efficiency by organizing relationships based on the release year. As a result, the evaluation times are reduced, leading to faster query processing for large graphs.
+
+To validate the effectiveness of the refactored query, one can examine the newly created `ACTED_IN_1995` relationship. This targeted query specifically retrieves movies acted by Tom Hanks in 1995 without unnecessary data retrieval, further enhancing query precision.
+
+```sql
+MATCH (p:Actor)-[:ACTED_IN_1995]->(m:Movie)
+WHERE p.name = 'Tom Hanks'
+RETURN m.title AS Movie
+```
