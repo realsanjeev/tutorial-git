@@ -70,20 +70,77 @@ Graph databases offer efficient storage and traversal of relationships compared 
 - Nodes represented by circles.
 - Labels group nodes into sets, with the same label belonging to the same set. Different labels have distinct colors.
 - Node properties follow the camelCase convention.
-- Relationships (directed arrows) connect nodes, representing actions.
+- Relationships (directed arrows) connect nodes, representing actions. Use relation as `verb` in use cases.
 - Relationship names follow the CAPITAL_SNAKE_CASE convention and may have associated properties.
 
+### Neo4J CRUD Operations
 
-CRUD Operation in Neo4J
-Create a node with property: 
-```
+#### Create a Node with Property
+```cypher
 MERGE (:Movie {title: 'Apollo 13', tmdbId: 568, released: '1995-06-30', imdbRating: 7.6, genres: ['Drama', 'Adventure', 'IMAX']})
 ```
-Create nodes and relation: 
+
+#### Another Example - Update Property of a Node
+```cypher
+MERGE (u:User {userId: 105})
+SET u.name = "RealSanjeev"
 ```
+
+#### Create Nodes and Relation
+```cypher
 CREATE (:Person {name: "Ram", age: 32})-[:LOVES]->(:Person {name: "Sita", country: "INDIA"})
 ```
-![Output of relation Graph](images/create_op_result.png)
-MATCH (:Person {name: "Ram", age: 32})-[:LOVES]->(:Person {name: "Sita"})
+![Output of Relation Graph](images/create_op_result.png)
 
-Delete all the data from graph database:  MATCH (n) DETACH delete n;
+#### Query - Return all nodes from Graph Database
+```cypher
+MATCH (n) RETURN n
+```
+#### Query - Return all Person nodes from Graph Database
+```cypher
+MATCH (n:Person) RETURN n
+```
+
+#### Query - Users Who Gave a Movie a Rating of 5
+```cypher
+MATCH (u:User)-[r:RATED]-(m:Movie)
+WHERE m.title = 'Apollo 13' AND r.rating = 5
+RETURN u.name as Reviewer
+```
+Output: ![Query Output](images/query_out.png)
+
+#### Delete All Data from Graph Database
+```cypher
+MATCH (n) DETACH DELETE n;
+```
+
+#### Tips and Tricks - Using label(Alias) for Relation Creation
+```cypher
+MATCH (sandy:User {name: 'Sandy Jones'})
+MATCH (apollo:Movie {title: 'Apollo 13'})
+MERGE (sandy)-[:RATED {rating:5}]->(apollo)
+```
+
+
+#### Why do you refactor a graph data model and graph?
+
+ - Any of the use cases cannot be answered by the graph.
+ - Another use case has been created that needs to be accounted for.
+ - The data model does not scale.
+
+#### Reseting after refactor
+- Identify which use cases are affected by the refactor.
+- REwrite any queries that can take advantage of the refactoring.
+- Test all queries affected by the refactor to ensure they return the same results as before the refactoring
+- PROFILE 
+
+**Note**: Labels should be used moderattely. Try to limit it to 4 label per node. But having more donot affect cyper as whole. Label are used to reduce the time access of node.
+
+Profiling the query
+```sql
+PROFILE MATCH (p:Person)-[:ACTED_IN]-()
+WHERE p.born < '1950'
+RETURN p.name
+```
+
+![Profiling the query](images/plan.png)
