@@ -85,3 +85,32 @@ Kibana serves as an open-source tool for data visualization and exploration, pur
 5. Log in to Kibana using the elastic user credentials. The password was generated during the initiation of Elasticsearch.
 
 These steps guide you through the process of setting up and connecting Kibana to your Elasticsearch container, facilitating a seamless integration for efficient data visualization and exploration.
+
+**If the above command produces an error, create a `compose.yaml` file and paste the following configuration:**
+
+```yaml
+version: "3.7"
+services:
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.12.0
+    container_name: elasticsearch
+    environment:
+      - xpack.security.enabled=false
+      - discovery.type=single-node
+      - xpack.security.http.ssl.enabled=false
+      - xpack.license.self_generated.type=trial
+    volumes:
+      - ./elasticsearch-data:/elastic-search/data
+    ports:
+      - 9200:9200
+  kibana:
+    container_name: kibana
+    image: docker.elastic.co/kibana/kibana:8.12.0
+    environment:
+      - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
+    ports:
+      - 5601:5601
+    depends_on:
+      - elasticsearch
+```
+This Docker Compose configuration sets up Elasticsearch and Kibana services. Exercise caution when using it in a project, as it disables security authentication. Use it only for specific scenarios.
