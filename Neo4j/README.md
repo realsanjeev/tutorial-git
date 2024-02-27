@@ -2,7 +2,7 @@
 
 Neo4j is a native graph database that manages and stores data in a natural and connected state. The term "native" is used because it stores data in a connected state, where each node not only stores its data but also its connections to adjacent nodes. This design enhances search efficiency, particularly when dealing with large databases that may take longer to process complex queries.
 
-Some features:
+**Some features of Neo4j**:
 - Used Cypher query language optimized for propery graph
 - Constant time traversals in  big graph for both depth and breadth due to efficient representation of nodes and relationships. Enables scale-up to billions of nodes on moderate hardware.
 - Flexible property graph schema that can adapt to bussiness changes, making it possible to materializa and add new relations, property later to shortcut and speed up the domain data
@@ -13,8 +13,25 @@ Some features:
 
 Neo4j Browser serves as a robust interface for querying Neo4j and visualizing data results. You can access the interface by connecting to `localhost:7474/browser`.
 
-Neo4j Browser supports all CRUD (Create, Read, Update, Delete) operations, allowing seamless interaction with Neo4j databases using the Cypher language.
+Neo4j Browser supports all **CRUD** (Create, Read, Update, Delete) operations, allowing seamless interaction with Neo4j databases using the Cypher language.
 
+## Selecting the Protocol
+
+Choose the appropriate protocol variation within your connection string for the `neo4j` scheme.
+
+- `neo4j`: Establishes an **unencrypted connection** to the DBMS. Use this option when connecting to a local DBMS or when encryption is not explicitly enabled.
+
+- `neo4j+s`: Establishes an **encrypted connection** to the DBMS. The driver verifies the certificate's authenticity and connectivity fails if any certificate issues arise.
+
+- `neo4j+ssc`: Establishes an **encrypted connection** to the DBMS but doesn't attempt to verify the authenticity of the certificate.
+
+For connecting directly to a single DBMS, especially within a clustered environment or standalone configuration, variations of the `bolt` scheme are available.
+
+- `bolt`: Establishes an unencrypted connection directly to a single DBMS.
+
+- `bolt+s`: Establishes an encrypted connection directly to a single DBMS and verifies the certificate.
+
+- `bolt+ssc`: Establishes an encrypted connection directly to a single DBMS but does not attempt to verify the authenticity of the certificate.
 ### Bolt Protocol
 
 Bolt is the primary protocol used by Neo4j for communication between clients and the Neo4j database server, replacing the earlier HTTP-based protocol. It is a binary protocol designed for efficiency and performance in handling graph database operations.
