@@ -2,6 +2,8 @@
 
 Docker is an OS virtualized software platform that allows IT organizations to quickly create, deploy, and run applications in Docker containers, which have all the dependencies within them. The container itself is a very lightweight package with all the instructions and dependencies—such as frameworks, libraries, and bins—within it.
 
+Also See: [NVIDIA-DOCKER](https://github.com/NVIDIA/nvidia-docker?tab=readme-ov-file)
+
 ### Docker vs Virtual Machines
 
 ![Alt text](images/image.png)
