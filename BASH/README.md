@@ -80,4 +80,90 @@ If we want to add `+`, `-` and `/` number we use `expr` command which treat the 
 expr 30 + 50
 ```
 We cannot write `expr 30+50`, we have to separate args with space to perform operation
-For multiplication we use `expr 40 \* 3`, here `\*` is escape ccharacter, since `*` is wildcard in bash.
+For multiplication we use `expr 40 \* 3`, here `\*` is escape character, since `*` is wildcard in bash.
+
+### Conditional Statements
+Conditional statements allow us to execute commands only if certain conditions are met.
+
+```bash
+#!/bin/bash
+
+mynum=200
+if [ $mynum -eq 200 ]; then
+    echo "mynum is equal to 200"
+elif [ $mynum -gt 200 ]; then
+    echo "mynum is greater than 200"
+else
+    echo "mynum is less than 200"
+fi
+```
+
+In the `if` statement, the expression is enclosed in square brackets `[ ]`, with each expression separated by a space. Here, we check if the variable is equal to 200 using the `-eq` flag for equality.
+
+Other comparison flags include:
+- `-ne`: Not equal
+- `-gt`: Greater than
+- `-lte`: Less than or equal to
+
+To check the existence of a file, we use `[ -f ~/file ]` in the expression. For directories, we use `-d` instead of `-f`.
+
+### Exit Code
+The exit code indicates whether a command was successful or not. It's an essential aspect of development since we often need to take different actions based on whether a command fails or succeeds. An exit code of `0` signifies success, while any non-zero value indicates failure.
+
+For example:
+```bash
+#!/bin/bash
+
+package=htop
+sudo apt install $package
+echo "The exit code for package installation is: $?"
+```
+
+We can also manually set the exit code in a script. When encountered, the script terminates, and we see the exit code of the terminated string.
+```bash
+#!/bin/bash
+
+directory=/etc
+if [ -d $directory ]; then
+    echo "The directory $directory exists"
+    exit 0
+else
+    echo "The directory $directory does not exist"
+    exit 1
+fi
+
+echo "This statement will not run regardless of whether the condition of the above statement is true or not"
+```
+## While Loop
+It is used to statement until the statement is true
+```bash
+#!/bin/bash
+
+myvar=1
+while [ $myvar -le 10 ]
+do
+    echo $myvar
+    myvar=$((myvar + 1))
+done
+echo "This is after the while loop"
+```
+
+## Examples
+**1. Script to update**
+```bash
+#!/bin/bash
+
+if [ -d /etc/pacman.d ]
+then
+    # The host is based on Arch, run the pacman update command
+    sudo pacman -Syn
+fi
+
+if [ -d /etc/apt ]
+then
+    # The host is based on Debian or Ubuntu,
+    # Run the apt version of the command
+    sudo apt update
+    sudo apt dist-upgrade
+fi
+```
