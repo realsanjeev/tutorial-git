@@ -1,4 +1,4 @@
-##Git SSH Clone
+## Git SSH Clone
 
 To clone a Git repository using SSH, you need to follow these steps:
 
