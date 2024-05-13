@@ -1,7 +1,11 @@
 #!/bin/bash
 
-mynum=200
-if [ $mynum -eq 200 ]
+lines=$(ls -h $1 | wc -l)
+
+if [ $# -ne 1 ]
 then
-	echo "The statement is true"
+    echo "This script requires exactly one directory path passed to it"
+    echo "Please try again"
+    exit 1
 fi
+echo "You have $(($lines-1)) objects in the $1 directory."

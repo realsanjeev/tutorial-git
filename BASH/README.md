@@ -74,6 +74,27 @@ Here, `$(ls)` is a subshell.
 
 Variables are generally named using lowercase letters. UPPERCASE variables are typically reserved for system variables or environment variables of your system (e.g., USER is a system variable). It's best practice to use lowercase for local variables. You can view all system variables and session variables using the `env` command.
 
+### Arguments in Bash
+
+In Bash scripting, arguments are values provided to a script or a function when it is executed. These arguments allow scripts to accept input dynamically, making them more flexible and versatile.
+
+In the provided script snippet:
+
+```bash
+#!/bin/bash
+
+lines=$(ls -lh $1 | wc -l)
+
+echo "You have $(($lines-1)) objects in the $1 directory."
+```
+
+- `$1` represents the first argument passed to the script.
+- The script uses `$1` as the directory path argument to the `ls` command.
+- `ls -lh $1` lists the contents of the directory specified by the first argument (`$1`), with human-readable sizes.
+- `wc -l` counts the number of lines in the output of `ls`.
+- The resulting count is stored in the variable `lines`.
+- The script then echoes a message indicating the number of objects (files and directories) in the specified directory, derived from the count stored in `lines`.
+
 ### Handling the math expression
 If we want to add `+`, `-` and `/` number we use `expr` command which treat the follow up args as expression
 ```bash
@@ -82,7 +103,7 @@ expr 30 + 50
 We cannot write `expr 30+50`, we have to separate args with space to perform operation
 For multiplication we use `expr 40 \* 3`, here `\*` is escape character, since `*` is wildcard in bash.
 
-### Conditional Statements
+## Conditional Statements
 Conditional statements allow us to execute commands only if certain conditions are met.
 
 ```bash
@@ -134,8 +155,11 @@ fi
 
 echo "This statement will not run regardless of whether the condition of the above statement is true or not"
 ```
+
+## Loop Statement
 ## While Loop
-It is used to statement until the statement is true
+A while loop is used to repeat a statement until the specified condition becomes false.
+
 ```bash
 #!/bin/bash
 
@@ -148,8 +172,89 @@ done
 echo "This is after the while loop"
 ```
 
+### For Loop
+A for loop is used to iterate through a sequence of items.
+
+```bash
+#!/bin/bash
+
+for current_num in {1..10}
+do
+    echo $current_num
+    sleep 1
+done
+
+echo "This is outside of the for loop."
+```
+
+It can also be used to process files in a directory.
+
+```bash
+#!/bin/bash
+
+# Iterate over the .log files in the logfiles directory
+for file in logfiles/*.log
+do
+    tar -csvf $file.tar.gz $file
+done
+```
+
+## Functions
+In programing we donot want to repeat writing same code again and again. ,We write functions for reliablity and readability.
+```bash
+check_exit_status() {
+    if [$? -ne 0 ]
+    then 
+        echo "An error occured, please check the $errorlog file."
+    fi
+}
+```
+
+
+## Other Commands
+Here's a command to find all the files in the `/etc` directory:
+
+```bash
+find /etc -type f 
+```
+
+To suppress any error messages that may occur and prevent them from displaying on the console, we can redirect stderr (standard error) to `/dev/null`, which effectively discards any output sent to it. This is useful when we only want to see the successful output and not the error messages.
+
+```bash
+find /etc -type f 2> /dev/null
+```
+
+In the above command:
+- `2` represents stderr (standard error).
+- `>/dev/null` redirects stderr to `/dev/null`, ensuring that any error messages are not displayed on the console.
+
+Conversely, if we want to see only the error messages and suppress the normal output, we can redirect stdout (standard output) to `/dev/null` instead:
+
+```bash
+find /etc -type f > /dev/null
+```
+
+In this command:
+- `>` redirects stdout to `/dev/null`, effectively discarding any normal output.
+- This means that only stderr (error messages) will be displayed on the console.
+
+If we want to wrie std err and stdout in single file we can write `&` symbol after f as `find /etc -type f &> texts.txt`. If we want to send stdout to onefile and stderr in another file. Note that we donot have to erite 1 since 1 represents stdout which is by defalut what is shown if we donot write 1.
+```bash
+find /etc -type f 1>std_out.txt 2>std_err.txt
+```
+
+
+Take standard input from user
+```bash
+#!/bin/bash
+
+echo "Please enter your name:"
+read myname
+echo "Your name is: $myname"
+```
 ## Examples
 **1. Script to update**
+We can see our os information using `cat /etc/os-release`. This file is in almost all distro of linux system
 ```bash
 #!/bin/bash
 
@@ -167,3 +272,19 @@ then
     sudo apt dist-upgrade
 fi
 ```
+
+Typically, we prefer not to store our scripts in the home directory or any publicly accessible directory. Instead, we opt for a location that is accessible to other users for execution but restricts their ability to update or modify the script. The commonly chosen location for this purpose is `/usr/local/bin`, and we often change the ownership of the script to the `root` user and `root` group for added security.
+
+```bash
+sudo mv update.sh /usr/local/bin/update
+sudo chown root:root /usr/local/bin/update
+```
+
+In this example, we've renamed the file `update.sh` to `update`. In Linux, script files do not require a file extension to specify their type. After moving the script to `/usr/local/bin`, it can be executed simply by typing `update`. If executing the script using this command fails, we can resolve it by adding the `/usr/local/bin` directory to the `PATH` variable.
+
+```bash
+export PATH=/usr/local/bin:$PATH
+```
+
+By adding this line to our shell configuration file (e.g., `.bashrc` or `.profile`), we ensure that the `/usr/local/bin` directory is included in the `PATH` variable every time we log in, allowing us to execute scripts stored in that location without specifying their full path.
+
