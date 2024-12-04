@@ -1,4 +1,4 @@
-### Configuring Git with SSL/TLS Certificate for Private GitLab Access
+## Configuring Git with SSL/TLS Certificate for Private GitLab Access
 
 When working with a private GitLab instance or any internal Git repository, SSL/TLS certificates are often used to secure communication between your local machine and the Git server. To ensure secure authentication and avoid connection issues, you need to configure Git to trust the server's SSL certificate.
 
@@ -93,7 +93,6 @@ openssl pkcs12 -in <company>_certificate.p12 -clcerts -nokeys -out <company>_cli
 - `-nokeys`: Ensures the private key is not included in the output.
 - `-out <company>_client.crt`: Specifies the output file where the extracted client certificate will be saved.
 
----
 
 #### **2. Extracting the Private Key**
 
@@ -109,7 +108,6 @@ openssl pkcs12 -in <company>_certificate.p12 -nodes -nocerts | openssl rsa -out 
 - `| openssl rsa`: Pipes the extracted private key to another `openssl` command to ensure it is in the correct RSA key format for Git.
 - `-out <company>_server.key`: Specifies the output file where the private key will be saved.
 
----
 
 #### **Result**:
 - The **first command** generates a file `<company>_client.crt` containing the client certificate.
@@ -117,7 +115,7 @@ openssl pkcs12 -in <company>_certificate.p12 -nodes -nocerts | openssl rsa -out 
 
 These files are used to configure Git to establish a secure connection with the server.
 
-**References**
+### **References**
 - [Create a pkcs12 (.pfx or .p12) from OpenSSL files - tbs-internet](https://www.tbs-certificates.co.uk/FAQ/en/288.html)
 - [openssl-pkcs12 - OpenSSL Documentation](https://docs.openssl.org/master/man1/openssl-pkcs12/)
 - [Working with openssl to extract information from a pkcs12 certificate - StackOverflow Discussion](https://stackoverflow.com/questions/8500475/working-with-openssl-to-extract-information-from-a-pkcs12-certificate)
