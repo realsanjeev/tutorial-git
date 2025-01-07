@@ -119,3 +119,4 @@ These files are used to configure Git to establish a secure connection with the 
 - [Create a pkcs12 (.pfx or .p12) from OpenSSL files - tbs-internet](https://www.tbs-certificates.co.uk/FAQ/en/288.html)
 - [openssl-pkcs12 - OpenSSL Documentation](https://docs.openssl.org/master/man1/openssl-pkcs12/)
 - [Working with openssl to extract information from a pkcs12 certificate - StackOverflow Discussion](https://stackoverflow.com/questions/8500475/working-with-openssl-to-extract-information-from-a-pkcs12-certificate)
+- [How to Install OpenSSL on Windows](https://kb.firedaemon.com/support/solutions/articles/4000121705)
