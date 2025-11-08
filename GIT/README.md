@@ -108,21 +108,94 @@ To delete the remote branch you have to push it. Or use `-d` flag short form of 
 git push origin --delete <branch-name>
 ```
 `git remote prune origin`: Prunes (removes) remote-tracking references to branches that no longer exist on the remote repository named "origin."
+## Git Stash
 
-## Git .gitignore
-`.gitignore` file includeitself is being ttracked. file that you donot want to be tracked. But `.gitignore` file itself is being tracked.
+While working within a Git repository directory, you may need to save uncommitted changes without committing them. The `git stash` command allows you to temporarily store these changes and restore your working directory to a clean state.
+
+**Save Your Changes**
+To stash your current modifications:
+
+```bash
+git stash
+```
+
+By default, this saves both tracked and staged changes. Your working directory will revert to the last committed state.
+
+You can also include a message to describe the stash:
+
+```bash
+git stash save "WIP: updating login feature"
+```
+
+**View Saved Stashes**
+To see a list of all stashed changes:
+
+```bash
+git stash list
+```
+
+Example output:
+
+```console
+stash@{0}: WIP on main: 1234abcd Updating login feature
+stash@{1}: WIP on feature/ui: 5678efgh Styling improvements
+```
+
+**Apply a Stash**
+To reapply the most recent stash:
+
+```bash
+git stash apply
+```
+
+If you want to apply a specific stash from the list:
+
+```bash
+git stash apply stash@{1}
+```
+
+> **Note:** Applying a stash does *not* remove it from the stash list.
+> To remove it after applying, use `git stash drop`.
+
+**Remove a Stash**
+Delete the most recent stash:
+
+```bash
+git stash drop
+```
+
+Or clear all stashes:
+
+```bash
+git stash clear
+```
+
+**Create and Apply in One Step**
+If you want to stash your work and immediately apply it on another branch:
+
+```bash
+git stash pop
+```
+
+This applies the most recent stash and removes it from the stash list in one step.
+
+
+## Git `.gitignore`
+The `.gitignore` file tells Git which files or directories should not be tracked.
+However, the `.gitignore` file itself is usually tracked so that other developers on the same project share the same ignore rules.
 ```bash
 touch .gitignore
 nano .gitignore
 ```
 Example
 ```
-# ignore all .config file
+# Ignore all .log files
 *.log
 # ignore all files in directory test in root.
 test/*
 ```
-It is also possible to gnore files and directory and not been shown in .gitignore file. For this specify file to be ignored in
+It is also possible to **ignore files** without listing them in `.gitignore`.
+You can do this by adding file patterns to:
 > .git/info/exclude_file
 
 ### `.gitattributes` files
@@ -147,8 +220,8 @@ Some common use cases for `.gitattributes` include:
 3. **Git Merge Strategies:** You can specify different merge strategies for specific files or paths.
 
     ```plaintext
-    # Use 'ours' merge strategy for files in the 'config/' directory
-    config/** -merge
+    # Use the 'ours' merge driver for files in the 'config/' directory
+    config/** merge=ours
     ```
 
 4. **Git Attributes for Linguist:** Linguist is a library used by GitHub to detect and highlight languages in repositories. You can use `.gitattributes` to override Linguist's language detection.
@@ -157,27 +230,68 @@ Some common use cases for `.gitattributes` include:
     # Override Linguist's language detection for a specific file
     filename linguist-language=Ruby
     ```
-## Git Revert Reset and Ammend
-`git revert` is command we use when we want to take a previous commit point and add it as new commit. But all log is still available
+
+## Git Revert Reset and Amend
+`git revert` is command we use when we want to take a previous commit point and add it as a new commit. But all log is still available.
 Revert latest commit in repo
 ```bash
 git revert HEAD --no-edit
 ```
-To revert to earlier commit, we use `git revert HEAD~x` where `x` is number from latest commit to specified commit. x is 0 for latest commit
+To revert to an earlier commit, we use `git revert HEAD~x` where `x` is the number from latest commit to the specified commit. `x` is 0 for latest commit.
+
 To undo revert command
 ```bash
 git revert --abort
 ```
-`Git reset` is different from `git revert`. `git reset` takes us to previous commit point and delete all log following that point. While `git revert` has all log.
+`git reset` is different from `git revert`. `git reset` takes us to a previous commit point and deletes all log following that point, while `git revert` keeps all log.
+
 ```bash
 git reset <commit-hash>
 ```
-You can get `<commit-hash>` from `git log --oneline`. It gors to point of `<commit-hash>`
-`git ammend` is used to modify most recent commit.
-To edit most latest commit, we use
+You can get `<commit-hash>` from `git log --oneline`. It goes to the point of `<commit-hash>`.
+
+`git amend` is used to modify the most recent commit.
+To edit the most recent commit message, we use
+```bash
+git commit --amend -m "This is edited message from latest commit"
 ```
-git commit -m 'This is edited message from latest commit`
+
+To add more files to the latest commit
+```bash
+git add <file>
+git commit --amend --no-edit
 ```
+
+To change the date of a commit
+```bash
+git commit --amend --date="YYYY-MM-DD HH:MM:SS"
+```
+
+Example
+```bash
+git commit --amend --date="2025-11-08 10:30:00"
+```
+
+We can also use environment variables before the commit command.
+
+```bash
+GIT_AUTHOR_DATE="2025-11-08 10:30:00" GIT_COMMITTER_DATE="2025-11-08 10:30:00" git commit --amend --no-edit
+```
+
+`GIT_AUTHOR_DATE` is the time when the commit was originally written.
+`GIT_COMMITTER_DATE` is the time when the commit was actually made or last changed.
+
+To change the date of older commits, we use interactive rebase
+```bash
+git rebase -i HEAD~x
+```
+
+Then change `pick` to `edit` for the commit we want to change and run
+```bash
+GIT_AUTHOR_DATE="YYYY-MM-DD HH:MM:SS" GIT_COMMITTER_DATE="YYYY-MM-DD HH:MM:SS" git commit --amend --no-edit
+git rebase --continue
+```
+
 
 
 # Git and Github
